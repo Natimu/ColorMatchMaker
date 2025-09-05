@@ -7,12 +7,11 @@ function SelectColor(){
     const [color2, setColor2] = useState("#a5662f");
     const [copied, setCopied] = useState(null);
     const [time, setTime] = useState(new Date());
-    const [hour, setTimerHour] = useState(new Date(0));
-    const [min, setTimerMin] = useState(new Date(0));
-    const [sec, setTimerSec] = useState(new Date(0));
+    const [hour, setTimerHour] = useState("");
+    const [min, setTimerMin] = useState("");
+    const [sec, setTimerSec] = useState("");
     const [timer, setTimer] = useState (0);
-
-    
+    const [palette, setPalette] = useState([]);
 
         useEffect(() => {
             const intervalID = setInterval(()=>{
@@ -24,9 +23,21 @@ function SelectColor(){
             }
     
         }, [])
+        useEffect(() => {
+            const endingTime = localStorage.getItem("endTime")
+            if(endingTime){
+                const remaining = Math.floor((endingTime - Date.now()) / 1000)
+                if (remaining > 0){
+                    setTimer(remaining);
+                }
+                else{
+                    localStorage.removeItem("endTime");
+                }
+            }
+        }, [])
 
         useEffect(() => {
-            if (timer <= 0) {
+            if (timer == 0) {
                 playAlarm();
                 return;
             }
@@ -38,6 +49,40 @@ function SelectColor(){
             }
         }, [timer])
 
+    async function getPalette(color){
+
+        try{
+            const rgb = hexToRgb(color);
+            const suggestion = await fetch("http://colormind.io/api/", {
+                    method: "POST",
+                    body: JSON.stringify({
+                    model: "default",
+                    input: [rgb, "N", "N", "N", "N"] 
+                })
+              });
+              const data = await suggestion.json();
+              setPalette(data.result);
+            } catch (err) {
+              console.error("Error fetching palette", err);
+            }
+    }
+    
+    function hexToRgb(hex){
+        const bigint = parseInt(hex.slice(1), 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return [r, g, b];
+    }
+    function rgbToHex(r, g, b) {
+        const toHex = (n) => {
+          const hex = n.toString(16);
+          return hex.length === 1 ? "0" + hex : hex;
+        };
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+      }
+      
+        
 
     function playAlarm(){
         const sound = new Audio("src/assets/alarm_sound/lo-fi-alarm-clock-243766.mp3");
@@ -70,7 +115,10 @@ function SelectColor(){
     }
 
     function convertToSec(hours, minutes, seconds){
-        return((hours*3600)+(minutes*60) + Number(seconds));
+        const totalSeconds = ((hours*3600)+(minutes*60) + Number(seconds));
+        const endTime = Date.now() + totalSeconds * 1000;
+        localStorage.setItem("endTime", endTime);
+        return(totalSeconds);
     }
     function startTimer(){
         setTimer(convertToSec(hour, min, sec));
@@ -144,7 +192,38 @@ function SelectColor(){
         <label>color 2</label>
         <input type="color" value={color1} onChange={handelColorChange1}/><br/>
         <label>color 3</label>
-        <input type="color" value={color2} onChange={handelColorChange2}/>
+        <input type="color" value={color2} onChange={handelColorChange2}/><br />
+        <div className="palette-button"><button onClick={() => getPalette(color0)}>Generate palette</button></div>
+        
+        </div>
+
+        <div className ="palette-board">
+            {palette.map((rgb, i) => { 
+                const hex = `#${rgb.map(x => Math.round(x).toString(16).padStart(2, "0"))
+                    .join("")}`;
+                return(
+                <div
+                key={i}   // Have to have a key to prevent the console error
+                style={{
+                    backgroundColor: `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`,
+                    width: "80px",
+                    height: "80px",
+                    margin: "5px",
+                    borderRadius: "8px"
+                }} 
+                onClick={() => handelCopy(hex)}
+                >
+                    <p style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignSelf: "center",
+                        padding: "10px"
+                        }}>
+                        {copied === hex ? "Copied!" : hex}
+                    </p>
+                </div> 
+                );
+        })}
         </div>
         <div className="breakTimer">
             <p>Set Timer</p>
@@ -152,7 +231,8 @@ function SelectColor(){
                 type="number" 
                 placeholder="Hours" 
                 value ={hour}
-                onChange={(e) => setTimerHour(Number(e.target.value))}/><br />
+                onChange={(e) => setTimerHour(Number(e.target.value))}/>
+                <br/>
             <input type="number" 
                 placeholder="Minutes" 
                 value ={min}
