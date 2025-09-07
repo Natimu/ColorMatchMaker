@@ -74,15 +74,7 @@ function SelectColor(){
         const b = bigint & 255;
         return [r, g, b];
     }
-    function rgbToHex(r, g, b) {
-        const toHex = (n) => {
-          const hex = n.toString(16);
-          return hex.length === 1 ? "0" + hex : hex;
-        };
-        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-      }
-      
-        
+         
 
     function playAlarm(){
         const sound = new Audio("src/assets/alarm_sound/lo-fi-alarm-clock-243766.mp3");
@@ -128,6 +120,10 @@ function SelectColor(){
             setTimerMin("");
             setTimerSec("");
         }, 1000)
+    }
+
+    function resetTimer(){
+        setTimer(0);
     }
 
     
@@ -242,6 +238,7 @@ function SelectColor(){
                 value ={sec}
                 onChange={(e) => setTimerSec(Number(e.target.value))}/><br />
                 <button onClick={startTimer}>Start Timer</button> <br />
+                <button className="stop" onClick ={resetTimer}>Reset Timer</button>
         </div>
         
     </div>)

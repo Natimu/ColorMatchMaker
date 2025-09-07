@@ -55,7 +55,7 @@ body{
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   color: hsla(0, 0%, 0%, 0.669);
   position: relative;
   padding-left: 50px;
@@ -71,6 +71,7 @@ body{
 .breakTimer button{
   border-radius: 5px 0px;
   background-color: rgba(8, 195, 49, 0.432);
+  height: 30px;
   width: 90% ;
   border: solid 1px white;
   transition: all 0.5s ease;
@@ -82,6 +83,12 @@ body{
 .breakTimer button:active{
   transform: scale(0.90);
 }
+
+.breakTimer button.stop{
+  background-color: rgba(255, 0, 0, 0.432);
+  margin: 2px;
+}
+
 .breakTimer input{
   max-width: 100px;
   margin-bottom: 5px;
@@ -96,7 +103,6 @@ body{
 
 }
 .breakTimer input:hover{
-  
   font-size: 15px;
   transform: scale(1.2);
 }
@@ -146,16 +152,35 @@ h2{
   transition: all 0.8s ease;
    
 }
-.input-container:hover {
-  background-color: rgba(0,0,0,0.05);
-  border-radius: 10px;
-}
+
 .palette-button{
 display: flex;
 flex-basis: 100%;
 justify-content: center;
 align-items: center;
 }
+
+.input-container button{
+  color: antiquewhite;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1rem;
+  height: 30px;
+  border-radius: 8px 0px;
+  border: 2px solid rgb(223, 217, 228);
+  background-color: rgba(0, 0, 0, 0.727);
+  transition: 0.3s ease;
+}
+
+.input-container button:hover{
+  background-color: rgb(250, 209, 156);
+  color: black;
+  box-shadow: 5px 5px 13px blueviolet, -5px -5px 13px black;
+}
+
+.input-container button:active{
+ transform: scale(0.9);
+}
+
 .palette-board{
   display: flex;
   margin-top: 20px;
