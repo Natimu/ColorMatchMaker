@@ -150,14 +150,33 @@ function SelectColor(){
     
     return( <div className="main-container" >
 
-        <div className="clock-container">
-            <div className="clock" >
-                <span>{formatTime()}</span><br />
-                <div className="timer">
-                    <label>Time left to take a break</label><br />
-                    <span>{formatCountDown(timer)}</span></div>
-            </div>
-        </div>
+                <div className="clock-container">
+                    <div className="clock" >
+                        <span>{formatTime()}</span><br />
+                    </div>
+                            <div className="timer">
+                                <span>{formatCountDown(timer)}</span> <br/>
+                                <button className="timerMenu">Set Timer</button>
+                                <div className="breakTimer">
+                                    <input 
+                                        type="number" 
+                                        placeholder="Hours" 
+                                        value ={hour}
+                                        onChange={(e) => setTimerHour(Number(e.target.value))}/> <br/>
+                                    <input type="number" 
+                                        placeholder="Minutes" 
+                                        value ={min}
+                                        onChange={(e) => setTimerMin(Number(e.target.value))}/><br />
+                                    <input type="number" 
+                                        placeholder="Seconds" 
+                                        value ={sec}
+                                        onChange={(e) => setTimerSec(Number(e.target.value))}/><br />
+                                        <button onClick={startTimer}>Start Timer</button> <br />
+                                        <button className="stop" onClick ={resetTimer}>Reset Timer</button>
+                            
+                        </div>
+                    </div>
+                </div>
 
 
         <h2>Color Matcher</h2>
@@ -221,25 +240,7 @@ function SelectColor(){
                 );
         })}
         </div>
-        <div className="breakTimer">
-            <p>Set Timer</p>
-            <input 
-                type="number" 
-                placeholder="Hours" 
-                value ={hour}
-                onChange={(e) => setTimerHour(Number(e.target.value))}/>
-                <br/>
-            <input type="number" 
-                placeholder="Minutes" 
-                value ={min}
-                onChange={(e) => setTimerMin(Number(e.target.value))}/><br />
-            <input type="number" 
-                placeholder="Seconds" 
-                value ={sec}
-                onChange={(e) => setTimerSec(Number(e.target.value))}/><br />
-                <button onClick={startTimer}>Start Timer</button> <br />
-                <button className="stop" onClick ={resetTimer}>Reset Timer</button>
-        </div>
+        
         
     </div>)
 }

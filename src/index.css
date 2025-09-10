@@ -49,24 +49,35 @@ body{
   border: 4px solid hsl(12, 80%, 19%);
 
 }
-.breakTimer{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: hsla(0, 0%, 0%, 0.669);
+.timer{
   position: relative;
-  padding-left: 50px;
-  padding-right: 50px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.breakTimer{
+  display: none;
+  position: absolute;
+  margin-top: 10px;
+  top: 100%;
   color: rgba(46, 30, 11, 0.734);
   font-size: 20px;
   transition: all 1.5s ease;
 }
-.breakTimer:hover{
-  background-color: rgba(0,0,0,0.05);
-  border-radius: 10px;
+.breakTimer{
+  position: relative;
+  background: rgb(225, 225, 225, 0.25);
+  backdrop-filter: blur(100px);
+  -webkit-backdrop-filter:blur(10px);
+  border: 1px solid rgba(225, 225, 225, 0.15);
+  box-shadow: 0 4px 20px rgba(18, 1, 1, 0.84);
+
+  width: 300px;
+  border-radius: 12px;
+  padding: 3px;
+}
+.timer:hover .breakTimer{
+  display: block;
+
 }
 .breakTimer button{
   border-radius: 5px 0px;
