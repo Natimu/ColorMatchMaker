@@ -5,6 +5,7 @@ function SelectColor(){
     const [color0, setColor0] = useState("#ff6a00");
     const [color1, setColor1] = useState("#ebf587");
     const [color2, setColor2] = useState("#a5662f");
+    const [color_in_text, setColor] = useState("");
     const [copied, setCopied] = useState(null);
     const [time, setTime] = useState(new Date());
     const [hour, setTimerHour] = useState("");
@@ -12,6 +13,8 @@ function SelectColor(){
     const [sec, setTimerSec] = useState("");
     const [timer, setTimer] = useState (0);
     const [palette, setPalette] = useState([]);
+    
+    
 
         useEffect(() => {
             const intervalID = setInterval(()=>{
@@ -126,7 +129,9 @@ function SelectColor(){
         setTimer(0);
     }
 
-    
+    function handleColorTextInput(value){
+        
+    }
 
     function handelCopy(value){
         navigator.clipboard.writeText(value)
@@ -208,6 +213,12 @@ function SelectColor(){
         <input type="color" value={color1} onChange={handelColorChange1}/><br/>
         <label>color 3</label>
         <input type="color" value={color2} onChange={handelColorChange2}/><br />
+        <input type="text" value={color_in_text} id="hex_color" 
+                        placeholder="Or insert color code" onChange={(e) => setColor(e.target.value)}/>
+
+        <div className="color_in_text"><button onClick={() => setColor0(color_in_text)}>submit</button></div>
+        
+
         <div className="palette-button"><button onClick={() => getPalette(color0)}>Generate palette</button></div>
         
         </div>

@@ -53,6 +53,7 @@ body{
   position: relative;
   display: inline-block;
   margin-bottom: 10px;
+  transition: all 0.5s all;
 }
 .breakTimer{
   display: none;
@@ -70,7 +71,6 @@ body{
   -webkit-backdrop-filter:blur(10px);
   border: 1px solid rgba(225, 225, 225, 0.15);
   box-shadow: 0 4px 20px rgba(18, 1, 1, 0.84);
-
   width: 300px;
   border-radius: 12px;
   padding: 3px;
