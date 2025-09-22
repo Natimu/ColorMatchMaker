@@ -55,7 +55,21 @@ function SelectColor(){
     async function getPalette(color){
 
         try{
-            const rgb = hexToRgb(color);
+            let rgb;
+            if (isHex(color)){
+                rgb = hexToRgb(color)
+            }else if (isHsl(color)){
+                rgb = hslToRgb(color)
+            }else if (isHsla(color)){
+                rgb = hslaToRgb(color)
+            }
+            else if(isRgb(color)){
+                rgb = color
+                .match(/\d+/g)
+                .map(Number)
+            }else{
+                throw new Error("Unsupported color format. Use HEX, RGB, or HSL.")
+            }
             const suggestion = await fetch("http://colormind.io/api/", {
                     method: "POST",
                     body: JSON.stringify({
@@ -70,14 +84,97 @@ function SelectColor(){
             }
     }
     
+    function isHex(color){
+        return /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/.test(color);
+    }
+    function isRgb(color){
+        return /^rgb\(\s*([0-9]{1,3}\s*,\s*){2}[0-9]{1,3}\s*\)$/.test(color);
+    }
+    function isHsl(color){
+        return /^hsl\(\s*([0-9]{1,3}\s*,\s*){2}[0-9]{1,3}%\s*\)$/.test(color);
+    }
+    function isHsla(color){
+        return /^hsla\(\s*\d{1,3}\s*,\s*\d{1,3}%\s*,\s*\d{1,3}%\s*,\s*(0|0?\.\d+|1(\.0)?)\s*\)$/i.test(color);
+    }
+
+    function hslaToRgb(hsla) {
+        // Extract numbers: "hsla(200, 50%, 50%, 0.5)" -> [200, 50, 50, 0.5]
+        let [h, s, l, a] = hsla.match(/[\d.]+/g).map(Number);
+
+        s /= 100;
+        l /= 100;
+
+        let c = (1 - Math.abs(2 * l - 1)) * s;
+        let x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+        let m = l - c / 2;
+
+        let r = 0, g = 0, b = 0;
+
+        if (0 <= h && h < 60) {
+            r = c; g = x; b = 0;
+        } else if (60 <= h && h < 120) {
+            r = x; g = c; b = 0;
+        } else if (120 <= h && h < 180) {
+            r = 0; g = c; b = x;
+        } else if (180 <= h && h < 240) {
+            r = 0; g = x; b = c;
+        } else if (240 <= h && h < 300) {
+            r = x; g = 0; b = c;
+        } else if (300 <= h && h < 360) {
+            r = c; g = 0; b = x;
+        }
+
+        return [
+            Math.round((r + m) * 255),
+            Math.round((g + m) * 255),
+            Math.round((b + m) * 255),
+        ];
+        }
+
+
     function hexToRgb(hex){
+        if (!hex.startsWith("#")) hex = "#" + hex;
         const bigint = parseInt(hex.slice(1), 16);
         const r = (bigint >> 16) & 255;
         const g = (bigint >> 8) & 255;
         const b = bigint & 255;
         return [r, g, b];
     }
-         
+    function hslToRgb(hsl){
+        // Extract numbers from string: "hsl(120, 100%, 50%)" -> [120, 100, 50]
+        let [h, s, l] = hsl.match(/\d+/g).map(Number);
+
+        // Convert percentages to fractions
+        s /= 100;
+        l /= 100;
+
+        let c = (1 - Math.abs(2 * l - 1)) * s; // chroma
+        let x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+        let m = l - c / 2;
+
+        let r = 0, g = 0, b = 0;
+
+        if (0 <= h && h < 60) {
+            r = c; g = x; b = 0;
+        } else if (60 <= h && h < 120) {
+            r = x; g = c; b = 0;
+        } else if (120 <= h && h < 180) {
+            r = 0; g = c; b = x;
+        } else if (180 <= h && h < 240) {
+            r = 0; g = x; b = c;
+        } else if (240 <= h && h < 300) {
+            r = x; g = 0; b = c;
+        } else if (300 <= h && h < 360) {
+            r = c; g = 0; b = x;
+        }
+
+        // Convert to [0,255] range and round
+        return [
+            Math.round((r + m) * 255),
+            Math.round((g + m) * 255),
+            Math.round((b + m) * 255)
+        ];
+    }
 
     function playAlarm(){
         const sound = new Audio("src/assets/alarm_sound/lo-fi-alarm-clock-243766.mp3");
@@ -129,9 +226,7 @@ function SelectColor(){
         setTimer(0);
     }
 
-    function handleColorTextInput(value){
-        
-    }
+    
 
     function handelCopy(value){
         navigator.clipboard.writeText(value)
@@ -213,12 +308,19 @@ function SelectColor(){
         <input type="color" value={color1} onChange={handelColorChange1}/><br/>
         <label>color 3</label>
         <input type="color" value={color2} onChange={handelColorChange2}/><br />
-        <input type="text" value={color_in_text} id="hex_color" 
-                        placeholder="Or insert color code" onChange={(e) => setColor(e.target.value)}/>
-
-        <div className="color_in_text"><button onClick={() => setColor0(color_in_text)}>submit</button></div>
         
-
+        <div className="text-color-selection">
+            
+           <div className="color-in-text"> 
+                <input type="text" 
+                    value={color_in_text} id="hex_color" 
+                     placeholder="Or insert color code" 
+                     onChange={(e) => setColor(e.target.value)}/>
+                <button onClick={() => setColor0(color_in_text)}>submit</button>
+            </div>
+        </div>
+        
+        
         <div className="palette-button"><button onClick={() => getPalette(color0)}>Generate palette</button></div>
         
         </div>
