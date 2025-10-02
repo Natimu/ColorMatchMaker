@@ -281,24 +281,26 @@ function SelectColor(){
 
         <h2>Color Matcher</h2>
         <div className="dis-container"> 
-            <div className="color dis0" 
-            onClick={() => handelCopy(color0)} 
-            style={{backgroundColor: color0}}>
+            <div className="dis-container-inside"> 
+                <div className="color dis0" 
+                    onClick={() => handelCopy(color0)} 
+                    style={{backgroundColor: color0}}>
 
-                <p>{copied === color0 ? "Copied!" : color0}</p>
-            </div>
+                        <p>{copied === color0 ? "Copied!" : color0}</p>
+                    </div>
 
 
-            <div className="color dis1" 
-            onClick={() => handelCopy(color1)} 
-            style={{backgroundColor: color1}}>
-                <p>{copied === color1 ? "Copied!" : color1}</p>
-            </div>
+                    <div className="color dis1" 
+                    onClick={() => handelCopy(color1)} 
+                    style={{backgroundColor: color1}}>
+                        <p>{copied === color1 ? "Copied!" : color1}</p>
+                    </div>
 
-            <div className="color dis2" 
-            onClick={() => handelCopy(color2)} 
-            style={{backgroundColor: color2}}>
-                <p>{copied === color2 ? "Copied!" : color2}</p>
+                    <div className="color dis2" 
+                    onClick={() => handelCopy(color2)} 
+                    style={{backgroundColor: color2}}>
+                        <p>{copied === color2 ? "Copied!" : color2}</p>
+                </div>
             </div>
         </div>
        <div className="input-container">
