@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from "react"
-
+import React, {useState, useEffect, useMemo} from "react"
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { loadFull } from "tsparticles";
 
 function SelectColor(){
     const [color0, setColor0] = useState("#ff6a00");
@@ -13,8 +14,34 @@ function SelectColor(){
     const [sec, setTimerSec] = useState("");
     const [timer, setTimer] = useState (0);
     const [palette, setPalette] = useState([]);
-    
-    
+    const [engineReady, setEngineReady] = useState(false);
+
+    const particlesOptions = useMemo(() => ({
+        background: { color: "transparent" },
+        particles: {
+            number: { value: 100 },
+            size: { value: 5 },
+            move: { enable: true, speed: 0.1 },
+            links: { enable: true, color: "#ffffff" },
+        },
+        interactivity: {
+            events: { onHover: { enable: true, mode: "repulse" } },
+        },
+    }), []); // Empty dependency array means this object is created once
+
+    useEffect(() => {
+        let mounted = true; // Fix: initialize as true
+
+        initParticlesEngine(async (engine) => {
+            await loadFull(engine); 
+        }).then(() => {
+            if (mounted) setEngineReady(true);
+        });
+
+        return () => {
+            mounted = false; // Fix: set to false on cleanup
+        };
+    }, []);
 
         useEffect(() => {
             const intervalID = setInterval(()=>{
@@ -40,17 +67,24 @@ function SelectColor(){
         }, [])
 
         useEffect(() => {
-            if (timer == 0) {
-                playAlarm();
-                return;
+            if (timer === 0) {
+                const sound = new Audio("src/assets/alarm_sound/lo-fi-alarm-clock-243766.mp3");
+                sound.play().catch((err) => console.error("Can not play sound", err));
+                const stopTimeout = setTimeout(() => {
+                sound.pause();
+                sound.currentTime = 0;
+                }, 10000);
+
+             return () => clearTimeout(stopTimeout); 
             }
+         
             const countDown = setInterval(() => {
                 setTimer((prev)=> prev -1);
             }, 1000);
             return() => {
                 clearInterval(countDown);
             }
-        }, [timer])
+        }, [timer]);
 
     async function getPalette(color){
 
@@ -176,12 +210,6 @@ function SelectColor(){
         ];
     }
 
-    function playAlarm(){
-        const sound = new Audio("src/assets/alarm_sound/lo-fi-alarm-clock-243766.mp3");
-        sound.play().catch((err) => console.error("Can not play sound", err));
-
-    }
-
     function formatTime(){
         let hours = time.getHours();
         const minutes = time.getMinutes();
@@ -246,9 +274,28 @@ function SelectColor(){
     function handelColorChange2(event){
         setColor2(event.target.value);
     }
+    
 
     
-    return( <div className="main-container" >
+    return( 
+    
+     <div className="h-screen w-full relative">
+            {engineReady && (
+                <Particles
+                    id="tsparticles"
+                    options={particlesOptions} // Use the memoized options
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        zIndex: 0,
+                    }}
+                />
+            )}
+      <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-3xl">
+        <div className="main-container" >
 
                 <div className="clock-container">
                     <div className="clock" >
@@ -281,7 +328,6 @@ function SelectColor(){
 
         <h2>Color Matcher</h2>
         <div className="dis-container"> 
-            <div className="dis-container-inside"> 
                 <div className="color dis0" 
                     onClick={() => handelCopy(color0)} 
                     style={{backgroundColor: color0}}>
@@ -301,7 +347,6 @@ function SelectColor(){
                     style={{backgroundColor: color2}}>
                         <p>{copied === color2 ? "Copied!" : color2}</p>
                 </div>
-            </div>
         </div>
        <div className="input-container">
         <label>color 1</label>
@@ -354,9 +399,10 @@ function SelectColor(){
                 </div> 
                 );
         })}
+                </div>
+            </div>
         </div>
-        
-        
-    </div>)
-}
+    </div>
+)
+};
 export default SelectColor
