@@ -1,6 +1,5 @@
-import React, {useState, useEffect, useMemo} from "react"
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadFull } from "tsparticles";
+import React, {useState, useEffect, useMemo} from "react";
+import ParticlesBackground from "./particlesBackground";
 
 function SelectColor(){
     const [color0, setColor0] = useState("#ff6a00");
@@ -14,34 +13,6 @@ function SelectColor(){
     const [sec, setTimerSec] = useState("");
     const [timer, setTimer] = useState (0);
     const [palette, setPalette] = useState([]);
-    const [engineReady, setEngineReady] = useState(false);
-
-    const particlesOptions = useMemo(() => ({
-        background: { color: "transparent" },
-        particles: {
-            number: { value: 100 },
-            size: { value: 5 },
-            move: { enable: true, speed: 0.1 },
-            links: { enable: true, color: "#ffffff" },
-        },
-        interactivity: {
-            events: { onHover: { enable: true, mode: "repulse" } },
-        },
-    }), []); // Empty dependency array means this object is created once
-
-    useEffect(() => {
-        let mounted = true; // Fix: initialize as true
-
-        initParticlesEngine(async (engine) => {
-            await loadFull(engine); 
-        }).then(() => {
-            if (mounted) setEngineReady(true);
-        });
-
-        return () => {
-            mounted = false; // Fix: set to false on cleanup
-        };
-    }, []);
 
         useEffect(() => {
             const intervalID = setInterval(()=>{
@@ -73,7 +44,7 @@ function SelectColor(){
                 const stopTimeout = setTimeout(() => {
                 sound.pause();
                 sound.currentTime = 0;
-                }, 10000);
+                }, 20000);
 
              return () => clearTimeout(stopTimeout); 
             }
@@ -278,130 +249,114 @@ function SelectColor(){
 
     
     return( 
-    
-     <div className="h-screen w-full relative">
-            {engineReady && (
-                <Particles
-                    id="tsparticles"
-                    options={particlesOptions} // Use the memoized options
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        zIndex: 0,
-                    }}
-                />
-            )}
-      <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-3xl">
-        <div className="main-container" >
+        <div style={{position: "relative"}}>
+            <ParticlesBackground/>
+            <div className="main-container" >
 
-                <div className="clock-container">
-                    <div className="clock" >
-                        <span>{formatTime()}</span><br />
-                    </div>
-                            <div className="timer">
-                                <span>{formatCountDown(timer)}</span> <br/>
-                                <button className="timerMenu">Set Timer</button>
-                                <div className="breakTimer">
-                                    <input 
-                                        type="number" 
-                                        placeholder="Hours" 
-                                        value ={hour}
-                                        onChange={(e) => setTimerHour(Number(e.target.value))}/> <br/>
-                                    <input type="number" 
-                                        placeholder="Minutes" 
-                                        value ={min}
-                                        onChange={(e) => setTimerMin(Number(e.target.value))}/><br />
-                                    <input type="number" 
-                                        placeholder="Seconds" 
-                                        value ={sec}
-                                        onChange={(e) => setTimerSec(Number(e.target.value))}/><br />
-                                        <button onClick={startTimer}>Start Timer</button> <br />
-                                        <button className="stop" onClick ={resetTimer}>Reset Timer</button>
-                            
+                    <div className="clock-container">
+                        <div className="clock" >
+                            <span>{formatTime()}</span><br />
+                        </div>
+                                <div className="timer">
+                                    <span>{formatCountDown(timer)}</span> <br/>
+                                    <button className="timerMenu">Set Timer</button>
+                                    <div className="breakTimer">
+                                        <input 
+                                            type="number" 
+                                            placeholder="Hours" 
+                                            value ={hour}
+                                            onChange={(e) => setTimerHour(Number(e.target.value))}/> <br/>
+                                        <input type="number" 
+                                            placeholder="Minutes" 
+                                            value ={min}
+                                            onChange={(e) => setTimerMin(Number(e.target.value))}/><br />
+                                        <input type="number" 
+                                            placeholder="Seconds" 
+                                            value ={sec}
+                                            onChange={(e) => setTimerSec(Number(e.target.value))}/><br />
+                                            <button onClick={startTimer}>Start Timer</button> <br />
+                                            <button className="stop" onClick ={resetTimer}>Reset Timer</button>
+                                
+                            </div>
                         </div>
                     </div>
+
+
+                <h2>Color Matcher</h2>
+                <div className="dis-container"> 
+                        <div className="color dis0" 
+                            onClick={() => handelCopy(color0)} 
+                            style={{backgroundColor: color0}}>
+
+                                <p>{copied === color0 ? "Copied!" : color0}</p>
+                            </div>
+
+
+                            <div className="color dis1" 
+                            onClick={() => handelCopy(color1)} 
+                            style={{backgroundColor: color1}}>
+                                <p>{copied === color1 ? "Copied!" : color1}</p>
+                            </div>
+
+                            <div className="color dis2" 
+                            onClick={() => handelCopy(color2)} 
+                            style={{backgroundColor: color2}}>
+                                <p>{copied === color2 ? "Copied!" : color2}</p>
+                        </div>
                 </div>
-
-
-        <h2>Color Matcher</h2>
-        <div className="dis-container"> 
-                <div className="color dis0" 
-                    onClick={() => handelCopy(color0)} 
-                    style={{backgroundColor: color0}}>
-
-                        <p>{copied === color0 ? "Copied!" : color0}</p>
+                <div className="input-container">
+                    <label>color 1</label>
+                    <input type="color" value={color0} onChange={handelColorChange0}/><br/>
+                    <label>color 2</label>
+                    <input type="color" value={color1} onChange={handelColorChange1}/><br/>
+                    <label>color 3</label>
+                    <input type="color" value={color2} onChange={handelColorChange2}/><br />
+                    
+                    <div className="text-color-selection">
+                        
+                    <div className="color-in-text"> 
+                            <input type="text" 
+                                value={color_in_text} id="hex_color" 
+                                placeholder="Or insert color code" 
+                                onChange={(e) => setColor(e.target.value)}/>
+                            <button onClick={() => setColor0(color_in_text)}>submit</button>
+                        </div>
                     </div>
-
-
-                    <div className="color dis1" 
-                    onClick={() => handelCopy(color1)} 
-                    style={{backgroundColor: color1}}>
-                        <p>{copied === color1 ? "Copied!" : color1}</p>
-                    </div>
-
-                    <div className="color dis2" 
-                    onClick={() => handelCopy(color2)} 
-                    style={{backgroundColor: color2}}>
-                        <p>{copied === color2 ? "Copied!" : color2}</p>
+                    
+                    
+                    <div className="palette-button"><button onClick={() => getPalette(color0)}>Generate palette</button></div>
+                    
                 </div>
-        </div>
-       <div className="input-container">
-        <label>color 1</label>
-        <input type="color" value={color0} onChange={handelColorChange0}/><br/>
-        <label>color 2</label>
-        <input type="color" value={color1} onChange={handelColorChange1}/><br/>
-        <label>color 3</label>
-        <input type="color" value={color2} onChange={handelColorChange2}/><br />
-        
-        <div className="text-color-selection">
-            
-           <div className="color-in-text"> 
-                <input type="text" 
-                    value={color_in_text} id="hex_color" 
-                     placeholder="Or insert color code" 
-                     onChange={(e) => setColor(e.target.value)}/>
-                <button onClick={() => setColor0(color_in_text)}>submit</button>
-            </div>
-        </div>
-        
-        
-        <div className="palette-button"><button onClick={() => getPalette(color0)}>Generate palette</button></div>
-        
-        </div>
 
-        <div className ="palette-board">
-            {palette.map((rgb, i) => { 
-                const hex = `#${rgb.map(x => Math.round(x).toString(16).padStart(2, "0"))
-                    .join("")}`;
-                return(
-                <div
-                key={i}   // Have to have a key to prevent the console error
-                style={{
-                    backgroundColor: `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`,
-                    width: "80px",
-                    height: "80px",
-                    margin: "5px",
-                    borderRadius: "8px"
-                }} 
-                onClick={() => handelCopy(hex)}
-                >
-                    <p style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignSelf: "center",
-                        padding: "10px"
-                        }}>
-                        {copied === hex ? "Copied!" : hex}
-                    </p>
-                </div> 
-                );
-        })}
+                <div className ="palette-board">
+                        {palette.map((rgb, i) => { 
+                            const hex = `#${rgb.map(x => Math.round(x).toString(16).padStart(2, "0"))
+                                .join("")}`;
+                            return(
+                            <div
+                            key={i}   // Have to have a key to prevent the console error
+                            style={{
+                                backgroundColor: `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`,
+                                width: "80px",
+                                height: "80px",
+                                margin: "5px",
+                                borderRadius: "8px"
+                            }} 
+                            onClick={() => handelCopy(hex)}
+                            >
+                                <p style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignSelf: "center",
+                                    padding: "10px"
+                                    }}>
+                                    {copied === hex ? "Copied!" : hex}
+                                </p>
+                            </div> 
+                            );
+                         })}
                 </div>
-            </div>
-        </div>
+             </div>
     </div>
 )
 };

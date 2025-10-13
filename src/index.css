@@ -4,18 +4,7 @@ body {
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
-  z-index: 1;
 }
-
-#tsparticles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-
 .main-container{
   display: flex;
   flex-direction: column;
@@ -23,7 +12,7 @@ body {
   align-items: center;
   min-height: 100vh;
    position: relative;
-  z-index: 10;
+  z-index: 0;
 }
 
 .clock-container{
@@ -180,8 +169,8 @@ align-items: center;
 .input-container button{
   color: antiquewhite;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 1rem;
-  height: 30px;
+  font-size: .8rem;
+  height: 25px;
   border-radius: 8px 0px;
   border: 2px solid hwb(273 85% 11%);
   background-color: rgba(0, 0, 0, 0.727);
@@ -228,6 +217,7 @@ align-items: center;
   box-shadow: 1px 1px 13px rgb(10, 10, 10), -1px -1px 13px black;
 }
 
+
 label{
   color: rgba(29, 24, 24, 0.291);
   padding: 20px;
@@ -236,4 +226,22 @@ label{
 .input-container label:hover{
   transform: scale(1.5);
 }
+#tsparticles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+}
 
+.timerMenu{
+ color: antiquewhite;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: .8rem;
+  height: 25px;
+  border-radius: 8px 0px;
+  border: 2px solid hwb(273 85% 11%);
+  background-color: rgba(0, 0, 0, 0.727);
+  transition: 0.3s ease;
+}
