@@ -317,7 +317,7 @@ function SelectColor(){
                     <div className="color-in-text"> 
                             <input type="text" 
                                 value={color_in_text} id="hex_color" 
-                                placeholder="Or insert color code" 
+                                placeholder="Insert color code" 
                                 onChange={(e) => setColor(e.target.value)}/>
                             <button onClick={() => setColor0(color_in_text)}>submit</button>
                         </div>

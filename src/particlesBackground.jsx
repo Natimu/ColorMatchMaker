@@ -20,7 +20,7 @@ function ParticlesBackground() {
       id="tsparticles"
       options={{
         background: {
-          color: { value:"" }, // background color
+          color: { value:"" },
         },
         fpsLimit: 20,
         interactivity: {
@@ -34,12 +34,16 @@ function ParticlesBackground() {
           },
         },
         particles: {
-          color: { value: "#f9f4f1ff" },
-          links: { color: "#141502ff", distance: 150, enable: true, opacity: 0.5, width: 1 },
+          color: { value: "random",
+                        animation: {
+                        enable: true,
+                        speed: 200,
+                        sync: false}},
+          links: { color: "random", distance: 150, enable: true, opacity: 0.3, width: 1 },
           move: { enable: true, speed: 1 },
-          number: { value: 200, density: { enable: true, area: 800 } },
+          number: { value: 250, density: { enable: true, area: 800 } },
           opacity: { value: 0.5 },
-          shape: { type: "triangle" },
+          shape: { type: ["triangle", "circle"] },
           size: { value: { min: 1, max: 5 } },
         },
         detectRetina: true,
