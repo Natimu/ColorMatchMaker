@@ -1,5 +1,5 @@
 body {
-  background-image: url(assets/900w-1tHZ2toU86M.webp);
+  background-color: rgb(22, 21, 21);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -24,11 +24,11 @@ body {
 }
 .clock{
   font-size: 5rem;
-  color: hsla(0, 0%, 0%, 0.205);
-  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.09);
+  color: #634b59;
+  text-shadow: 3px 3px 5px rgba(65, 48, 48, 0.09);
 }
 .clock .timer{
-  font-size: 2rem;
+  font-size: 20rem;
 }
 .dis-container{
   display: flex;
@@ -50,12 +50,16 @@ body {
   margin-bottom: 10px;
   transition: all 0.5s all;
 }
+.timer span{
+  color: #dadbd0;
+  padding: 50px;
+}
 .breakTimer{
   display: none;
   position: absolute;
   margin-top: 10px;
   top: 100%;
-  color: rgba(46, 30, 11, 0.734);
+  color: hsl(15, 13%, 88%);
   font-size: 20px;
   transition: all 1.5s ease;
 }
@@ -117,7 +121,7 @@ body {
   border-color:#ebf587;
 }
 .breakTimer input::placeholder{
-  color: rgba(66, 62, 62, 0.87);
+  color: rgba(20, 19, 19, 0.87);
 }
 
 .color{
@@ -138,14 +142,14 @@ body {
 h2{
   margin: 40px;
   align-items: center;
-  color:  hsla(0, 0%, 0%, 0.59);
+  color:  #3a353b;
   font-size: 30px;
 
   font-family: 'Times New Roman', Times, serif;
   font-weight: bold;
   text-transform: uppercase;
   text-rendering: optimizeLegibility;
-  text-shadow: 1px 3px 2px  rgb(210, 202, 202);
+  text-shadow: 1px 1px 2px  rgb(210, 202, 202);
 
 }
 .input-container{
@@ -158,6 +162,10 @@ h2{
   transition: all 0.8s ease;
    
 }
+.input-container label{
+  color: aliceblue;
+}
+
 
 .palette-button{
 display: flex;
@@ -211,7 +219,11 @@ align-items: center;
   border-radius: 4px;
   border: hsl(37, 4%, 38%) solid 2px;
   padding-left: 8px;
+  background-color: #dadbd0;
   
+}
+.color-in-text input::placeholder{
+  color: rgb(40, 37, 37);
 }
 .color-in-text input:hover{
 

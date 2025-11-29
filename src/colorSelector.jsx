@@ -225,8 +225,6 @@ function SelectColor(){
         setTimer(0);
     }
 
-    
-
     function handelCopy(value){
         navigator.clipboard.writeText(value)
         .then(() => {
@@ -245,8 +243,6 @@ function SelectColor(){
     function handelColorChange2(event){
         setColor2(event.target.value);
     }
-    
-
     
     return( 
         <div style={{position: "relative"}}>
@@ -276,7 +272,6 @@ function SelectColor(){
                                             onChange={(e) => setTimerSec(Number(e.target.value))}/><br />
                                             <button onClick={startTimer}>Start Timer</button> <br />
                                             <button className="stop" onClick ={resetTimer}>Reset Timer</button>
-                                
                             </div>
                         </div>
                     </div>

@@ -41,10 +41,10 @@ function ParticlesBackground() {
                         sync: false}},
           links: { color: "random", distance: 150, enable: true, opacity: 0.3, width: 1 },
           move: { enable: true, speed: 1 },
-          number: { value: 250, density: { enable: true, area: 800 } },
+          number: { value: 150, density: { enable: true, area: 800 } },
           opacity: { value: 0.5 },
           shape: { type: ["triangle", "circle"] },
-          size: { value: { min: 1, max: 5 } },
+          size: { value: { min: 1, max: 4 } },
         },
         detectRetina: true,
       }}
